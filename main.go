@@ -1,40 +1,48 @@
 package main
 
-import(
+import (
+	"flag"
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/menghua6/time-store/api"
+	"github.com/menghua6/time-store/db"
 )
-func main()  {
+
+var port string
+
+func main() {
+	flag.StringVar(&db.MysqlUserName, "mysql-username", "", "mysql username")
+	flag.StringVar(&db.MysqlPassword, "mysql-password", "", "mysql password")
+	flag.StringVar(&db.MysqlHost, "mysql-host", "", "mysql host")
+	flag.StringVar(&db.MysqlPort, "mysql-port", "", "mysql port")
+	flag.StringVar(&db.MysqlDbName, "mysql-db-name", "", "mysql-db-name")
+	flag.StringVar(&api.FeishuUrl,"feishu-url","","feishu url")
+	flag.StringVar(&port, "port", "", "port")
+	flag.Parse()
+	
 	r := gin.Default()
 
 	r.GET("/", func(context *gin.Context) {
-		response := "" +
-		"  | 09/04 | 09/05 | 09/06 | 09/07 | 09/08 | 09/09 | 09.10 | \n" +
-		"00|       |       |       |       |       |       |       | \n" +
-		"01|       |       |       |       |       |       |       | \n" +
-		"02|       |       |       |       |       |       |       | \n" +
-		"03|       |       |       |       |       |       |       | \n" +
-		"04|       |       |       |       |       |       |       | \n" +
-		"05|       |       |       |       |       |       |       | \n" +
-		"06|       |       |       |       |       |       |       | \n" +
-		"07|       |       |       |       |       |       |       | \n" +
-		"08|       |       |       |       |       |       |       | \n" +
-		"09|       |       |       |       |       |       |       | \n" +
-		"10|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"11|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"12|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"13|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"14|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"15|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"16|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"17|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"18|   *   |   *   |   *   |   *   |   *   |       |       | \n" +
-		"19|       |       |       |       |   *   |       |       | \n" +
-		"20|       |       |       |       |   *   |       |       | \n" +
-		"21|       |       |       |       |       |       |       | \n" +
-		"22|       |       |       |       |       |       |       | \n" +
-		"23|       |       |       |       |       |       |       | \n"
-		context.String(200, response)
+		response, err := api.Schedule()
+		if err != nil {
+			log.Println(err.Error())
+			context.String(400, "请求错误")
+		} else {
+			context.String(200, response)
+		}
 	})
 
-	r.Run(":8081")
+	r.GET("/reserve/:describe", func(context *gin.Context) {
+		describe := context.Param("describe")
+		response, err := api.Reserve(describe)
+		if err != nil {
+			log.Println(err.Error())
+			context.String(400, "请求错误")
+		} else {
+			context.String(200, response)
+		}
+	})
+
+	r.Run(port)
 }
