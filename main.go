@@ -21,6 +21,11 @@ func main() {
 	flag.StringVar(&port, "port", "", "port")
 	flag.Parse()
 	
+	// if err := db.InitMysql(); err != nil {
+	// 	log.Println(err.Error())
+	// 	return
+	// }
+
 	r := gin.Default()
 
 	r.GET("/", func(context *gin.Context) {

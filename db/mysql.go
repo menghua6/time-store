@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/menghua6/time-store/entity"
 	"gorm.io/driver/mysql"
@@ -26,4 +27,13 @@ func InitMysql() error {
 	mysqlDb = db
 
 	return nil
+}
+
+func GetJobsByTime(st time.Time, et time.Time) ([]entity.Job, error) {
+	jobs := make([]entity.Job, 0)
+	dbRes := mysqlDb.Where("start-time <= ?", et).Where("end-time >= ?", st).Find(&jobs)
+	if dbRes.Error != nil {
+		return nil, dbRes.Error
+	}
+	return jobs, nil
 }
