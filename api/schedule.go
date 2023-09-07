@@ -71,7 +71,8 @@ func timeCardInit(timeCard *[24][showDay]int) error {
 	specialRestDayMap[time.Date(2023, 10, 06, 0, 0, 0, 0, time.Local)] = 1
 
 	partTimeJobMap := make(map[time.Time]string)
-	partTimeJobMap[time.Date(2023, 9, 10, 0, 0, 0, 0, time.Local)] = "10-12,14-18"
+	partTimeJobMap[time.Date(2023, 9, 9, 0, 0, 0, 0, time.Local)] = "7-17"
+	partTimeJobMap[time.Date(2023, 9, 10, 0, 0, 0, 0, time.Local)] = "7-20"
 
 	now := time.Now()
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
