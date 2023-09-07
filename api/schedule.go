@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-const showDay = 30
+const showDay = 20
 
 func Schedule() (string, error) {
 	timeCard := [24][showDay]int{}
-	err := timeCardInit(timeCard)
+	err := timeCardInit(&timeCard)
 	if err != nil {
 		return "", err
 	}
@@ -56,7 +56,7 @@ func Schedule() (string, error) {
 	return timeLine, nil
 }
 
-func timeCardInit(timeCard [24][showDay]int) error {
+func timeCardInit(timeCard *[24][showDay]int) error {
 	//work-day
 	specialWorkDayMap := make(map[time.Time]int)
 	specialWorkDayMap[time.Date(2023, 10, 7, 0, 0, 0, 0, time.Local)] = 1
@@ -77,16 +77,16 @@ func timeCardInit(timeCard [24][showDay]int) error {
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
 	for i := 0; i < showDay; i++ {
 		date := now.Add(time.Hour * 24 * time.Duration(i))
-		if date.Weekday() != time.Saturday || date.Weekday() != time.Sunday {
+		if date.Weekday() != time.Saturday && date.Weekday() != time.Sunday {
 			if _, ok := specialRestDayMap[date]; !ok {
 				for j := 10; j < 19; j++ {
-					timeCard[i][j] = -1
+					timeCard[j][i] = -1
 				}
 			}
 		} else {
 			if _, ok := specialWorkDayMap[date]; ok {
 				for j := 10; j < 19; j++ {
-					timeCard[i][j] = -1
+					timeCard[j][i] = -1
 				}
 			}
 		}
@@ -97,7 +97,7 @@ func timeCardInit(timeCard [24][showDay]int) error {
 				s, _ := strconv.Atoi(se[0])
 				e, _ := strconv.Atoi(se[1])
 				for k := s; k < e; k++ {
-					timeCard[i][k] = -1
+					timeCard[k][i] = -1
 				}
 			}
 		}
