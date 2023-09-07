@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const showDay = 20
+const showDay = 15
 
 func Schedule() (string, error) {
 	timeCard := [24][showDay]int{}
