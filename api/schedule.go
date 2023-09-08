@@ -14,7 +14,13 @@ func Schedule() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	timeLine := "时间商店 \n\n下达任务（示例） \n/reserve/联系方式：*****，任务：成为下一代007（凌晨0点上班，第二天凌晨0点下班，每周工作7天！！） \n\n"
+	timeLine := "" +
+	"时间商店 \n" +
+	"\n" +
+	"下达任务（示例） \n" +
+	"/reserve/联系方式：*****,任务:成为下一代007(凌晨0点上班,第二天凌晨0点下班,每周工作7天!!) \n" + 
+	"\n"
+
 	for i := 0; i < 50; i++ {
 		if i == 0 {
 			timeLine += "  |"
